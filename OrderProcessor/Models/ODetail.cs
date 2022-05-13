@@ -1,4 +1,4 @@
-﻿namespace OrderService.Models
+﻿namespace OrderProcessor.Models
 {
     public class ODetail
     {

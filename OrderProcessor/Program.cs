@@ -40,20 +40,38 @@ using (var consumer = new ConsumerBuilder<string, string>(config).Build())
             using (var context = new StudyCaseContext())
             {
                 var user = context.Users.Where(o=>o.Username==ordersData.UserName).SingleOrDefault();
-                Order order = new Order();
-                order.Code = ordersData.Code;
-                order.UserId = user.Id;
-                context.Orders.Add(order);
-                List<OrderDetail> Details = new List<OrderDetail>();
-                foreach(var detail in ordersData.Details)
+                //Order order = new Order();
+                //order.Code = ordersData.Code;
+                //order.UserId = user.Id;
+                //context.Orders.Add(order);
+                //List<OrderDetail> Details = new List<OrderDetail>();
+                //foreach(var detail in ordersData.Details)
+                //{
+                //    OrderDetail orderDetail = new OrderDetail();
+                //    orderDetail.OrderId = order.Id;
+                //    orderDetail.ProductId = detail.ProductId;
+                //    orderDetail.Quantity = detail.Quantity;
+                //    Details.Add(orderDetail);
+                //}
+                //context.OrderDetails.AddRange(Details);
+                var order = new Order
                 {
-                    OrderDetail orderDetail = new OrderDetail();
-                    orderDetail.OrderId = order.Id;
-                    orderDetail.ProductId = detail.ProductId;
-                    orderDetail.Quantity = detail.Quantity;
-                    Details.Add(orderDetail);
+                    Code = ordersData.Code,
+                    UserId = user.Id
+                };
+                context.Orders.Add(order);
+                foreach (var item in ordersData.Details)
+                {
+                    var detail = new OrderDetail
+                    {
+                        OrderId = order.Id,
+                        ProductId = item.ProductId,
+                        Quantity = item.Quantity
+                    };
+                    order.OrderDetails.Add(detail);
                 }
-                context.OrderDetails.AddRange(Details);
+                //Console.WriteLine($"userId {order.UserId}");
+                context.Orders.Add(order);
                 context.SaveChanges();
             }
         }
