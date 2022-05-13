@@ -1,6 +1,8 @@
 ﻿using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using OrderProcessor.Models;
+using OrderService.GraphQL;
 
 Console.WriteLine("Order Procesor App");
 
@@ -33,16 +35,25 @@ using (var consumer = new ConsumerBuilder<string, string>(config).Build())
         {
             var cr = consumer.Consume(cts.Token); // blocking
             Console.WriteLine($"Consumed record with key: {cr.Message.Key} and value: {cr.Message.Value}");
-
+            OrderKafka ordersData = JsonConvert.DeserializeObject<OrderKafka>(cr.Message.Value);
             // EF
             using (var context = new StudyCaseContext())
             {
+                var user = context.Users.Where(o=>o.Username==ordersData.UserName).SingleOrDefault();
                 Order order = new Order();
-                order.Code = cr.Message.Key;
-                //order.Created = DateTime.Now;
-                //order.UserId = cr.Message.Value;
-
+                order.Code = ordersData.Code;
+                order.UserId = user.Id;
                 context.Orders.Add(order);
+                List<OrderDetail> Details = new List<OrderDetail>();
+                foreach(var detail in ordersData.Details)
+                {
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.OrderId = order.Id;
+                    orderDetail.ProductId = detail.ProductId;
+                    orderDetail.Quantity = detail.Quantity;
+                    Details.Add(orderDetail);
+                }
+                context.OrderDetails.AddRange(Details);
                 context.SaveChanges();
             }
         }

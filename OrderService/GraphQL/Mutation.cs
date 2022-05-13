@@ -1,5 +1,6 @@
 ﻿using HotChocolate.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using OrderService.Models;
 using System.Security.Claims;
 
@@ -83,7 +84,7 @@ namespace OrderService.GraphQL
             return input;
         }
 
-        public async Task<OrderData> SubmitOrderAsync(OrderData input, ClaimsPrincipal claimsPrincipal, [Service] IOptions<KafkaSettings> settings)
+        public async Task<OrderKafka> SubmitOrderAsync(OrderData input, ClaimsPrincipal claimsPrincipal, [Service] IOptions<KafkaSettings> settings)
         {
             var userName = claimsPrincipal.Identity.Name;
 
@@ -94,23 +95,23 @@ namespace OrderService.GraphQL
                 UserName = userName
 
             };
-            //List
-            //foreach (var item in input.Details)
-            //{
-            //    var detail = new OrderDetail
-            //    {
-            //        OrderId = order.Id,
-            //        ProductId = item.ProductId,
-            //        Quantity = item.Quantity
-            //    };
-            //    order.OrderDetails.Add(detail);
-            //}
-            //Console.WriteLine($"userId {order.UserId}");
+            List<ODetail> details = new();
+            foreach (var item in input.Details)
+            {
+                var detail = new ODetail
+                {
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity
+                };
+                details.Add(detail);
+            }
+            order.Details = details;
+            var dts = DateTime.Now.ToString();
+            var key = "order-" + dts;
+            var val = JsonConvert.SerializeObject(order);
 
-            //input.Id = order.Id;
-            //input.Code = order.Code;
-            //input.UserId = order.UserId;
-            return new OrderData();
+            var result = await KafkaHelper.SendMessage(settings.Value, "OrderServices", key, val);
+            return order;
         }
 
 
