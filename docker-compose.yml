@@ -1,0 +1,70 @@
+version: '3.4'
+
+services:
+
+
+  zookeeper:
+    image: docker.io/bitnami/zookeeper
+    ports:
+      - "2181:2181"
+    volumes:
+      - "./zookeeper_data:/bitnami"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - app-tier
+  kafka:
+    image: docker.io/bitnami/kafka
+    hostname: kafkaserver.local
+    ports:
+      - "9092:9092"
+    links:
+      - "zookeeper"
+    volumes:
+      - "./kafka_data:/bitnami"
+    environment:      
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+    networks:
+      - app-tier
+
+  userservice:
+    image: ${DOCKER_REGISTRY-}userservice
+    build:
+      context: .
+      dockerfile: UserService/Dockerfile
+
+  productservcie:
+    image: ${DOCKER_REGISTRY-}productservcie
+    build:
+      context: .
+      dockerfile: ProductServcie/Dockerfile
+
+
+  orderservice:
+    image: ${DOCKER_REGISTRY-}orderservice
+    build:
+      context: .
+      dockerfile: OrderService/Dockerfile
+
+
+  orderprocessor:
+    image: ${DOCKER_REGISTRY-}orderprocessor
+    build:
+      context: .
+      dockerfile: OrderProcessor/Dockerfile
+
+networks:
+  app-tier:
+    driver: bridge
+
+volumes:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local
+
