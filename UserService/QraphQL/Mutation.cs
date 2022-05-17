@@ -95,8 +95,5 @@ namespace UserService.QraphQL
 
             return await Task.FromResult(new UserToken(null, null, Message: "Username or password was invalid"));
         }
-
-        
-
     }
 }

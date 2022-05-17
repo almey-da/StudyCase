@@ -39,21 +39,7 @@ using (var consumer = new ConsumerBuilder<string, string>(config).Build())
             // EF
             using (var context = new StudyCaseContext())
             {
-                var user = context.Users.Where(o=>o.Username==ordersData.UserName).SingleOrDefault();
-                //Order order = new Order();
-                //order.Code = ordersData.Code;
-                //order.UserId = user.Id;
-                //context.Orders.Add(order);
-                //List<OrderDetail> Details = new List<OrderDetail>();
-                //foreach(var detail in ordersData.Details)
-                //{
-                //    OrderDetail orderDetail = new OrderDetail();
-                //    orderDetail.OrderId = order.Id;
-                //    orderDetail.ProductId = detail.ProductId;
-                //    orderDetail.Quantity = detail.Quantity;
-                //    Details.Add(orderDetail);
-                //}
-                //context.OrderDetails.AddRange(Details);
+                var user = context.Users.Where(o => o.Username == ordersData.UserName).SingleOrDefault();
                 var order = new Order
                 {
                     Code = ordersData.Code,
@@ -70,7 +56,6 @@ using (var consumer = new ConsumerBuilder<string, string>(config).Build())
                     };
                     order.OrderDetails.Add(detail);
                 }
-                //Console.WriteLine($"userId {order.UserId}");
                 context.Orders.Add(order);
                 context.SaveChanges();
             }
@@ -78,7 +63,7 @@ using (var consumer = new ConsumerBuilder<string, string>(config).Build())
     }
     catch (OperationCanceledException)
     {
-        // Ctrl-C was pressed.
+        
     }
     finally
     {

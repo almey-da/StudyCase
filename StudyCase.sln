@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService", "UserService\UserService.csproj", "{8BF5B6DE-FA82-4830-B756-ADD371CFCC76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService", "UserService\UserService.csproj", "{8BF5B6DE-FA82-4830-B756-ADD371CFCC76}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{D417044E-D776-450C-AB13-4F1348EBDA4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductServcie", "ProductServcie\ProductServcie.csproj", "{DCB9D4BD-389B-470B-AE15-689258955781}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductServcie", "ProductServcie\ProductServcie.csproj", "{DCB9D4BD-389B-470B-AE15-689258955781}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService", "OrderService\OrderService.csproj", "{2E459B69-19BD-446E-BEFC-1298F02E7A48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderService", "OrderService\OrderService.csproj", "{2E459B69-19BD-446E-BEFC-1298F02E7A48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderProcessor", "OrderProcessor\OrderProcessor.csproj", "{0DC693EA-17A3-478F-8676-BD74635A2313}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderProcessor", "OrderProcessor\OrderProcessor.csproj", "{0DC693EA-17A3-478F-8676-BD74635A2313}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
